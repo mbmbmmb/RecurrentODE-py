@@ -1,0 +1,24 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+
+# OS / editor
+.DS_Store
+.idea/
+.vscode/
+
+# Large generated artifacts
+results/
+test/results/
+**/data/
+**/res/
+*.npz
+*.npy
+*.log
+
+# Job submission outputs
+job_submission/logs/
+job_submission/out/

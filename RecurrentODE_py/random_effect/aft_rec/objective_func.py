@@ -1,0 +1,58 @@
+"""Port of random effect/aft_rec/objective_func.m (identical to aft/)."""
+from __future__ import annotations
+
+import numpy as np
+from scipy.integrate import solve_ivp
+
+from ...common import spcol
+from .baseline_hazard_func import baseline_hazard_func
+from .baseline_hazard_grad_func import baseline_hazard_grad_func
+
+
+def objective_func(r, x, time, delta, knots, k):
+    x = np.asarray(x, dtype=float)
+    time = np.asarray(time, dtype=float).ravel()
+    delta = np.asarray(delta, dtype=float).ravel()
+
+    q = knots.size - k
+    idx = np.where(delta == 0)[0]
+    tau = time[idx]
+    x_tau = x[idx]
+    N, p = x.shape
+    m = idx.size
+
+    beta = np.asarray(r[:p], dtype=float)
+    theta = np.asarray(r[p:p + q], dtype=float)
+
+    multi_coef = np.exp(x_tau @ beta)
+
+    u_all = np.unique(time)
+    bin_all = np.searchsorted(u_all, time)
+    B = spcol(knots, k, u_all)[bin_all]
+
+    l1 = -float(((B @ theta + x @ beta) * delta).sum())
+
+    u, bin_idx = np.unique(tau, return_inverse=True)
+    tspan = np.concatenate([[1e-12], u])
+    sol = solve_ivp(
+        lambda t, y: baseline_hazard_func(t, theta, knots, k),
+        (tspan[0], tspan[-1]), [0.0], t_eval=tspan, method='RK45',
+        rtol=1e-6, atol=1e-9,
+    )
+    cum_baseline_hazard = sol.y[0, 1:][bin_idx]
+
+    l2 = float(cum_baseline_hazard @ multi_coef)
+    loss = (l1 + l2) / m
+
+    tspan_g = np.concatenate([[1e-8], u])
+    sol_g = solve_ivp(
+        lambda t, y: baseline_hazard_grad_func(t, theta, knots, k).ravel(),
+        (tspan_g[0], tspan_g[-1]), np.zeros(q), t_eval=tspan_g, method='RK45',
+        rtol=1e-6, atol=1e-9,
+    )
+    dtheta2 = sol_g.y[:, 1:].T[bin_idx]
+
+    grad_beta = -(x.T @ delta) + x_tau.T @ (cum_baseline_hazard * multi_coef)
+    grad_theta = -(B.T @ delta) + dtheta2.T @ multi_coef
+    grad = np.concatenate([grad_beta, grad_theta]) / m
+    return loss, grad

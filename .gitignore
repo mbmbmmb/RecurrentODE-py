@@ -1,0 +1,34 @@
+# ─── OS / editor junk ─────────────────────────────────────────────
+.DS_Store
+**/.DS_Store
+
+# ─── Python caches ────────────────────────────────────────────────
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.ipynb_checkpoints/
+
+# ─── Local tooling (not for publication) ──────────────────────────
+.claude/
+.sixth/
+
+# ─── Already published separately at github.com/mbmbmmb/RecurrentODE ─
+RecurrentODE/
+
+# ─── Proprietary MIMIC-III data (DO NOT DISTRIBUTE) ───────────────
+# Raw + processed MIMIC data folder (proprietary, ~1.4G)
+MIMIC Data/
+
+# Patient-level MIMIC-derived data — prohibited by the MIMIC-III DUA
+mimic_analysis/merged_data/
+
+# ─── Numerical results (keep plots only, per project decision) ────
+# Simulation / analysis data outputs — we publish plots, not raw numbers
+*.npz
+*.csv
+*.log
+
+# ─── What we DO publish: .py source and plot images ───────────────
+# (nothing to list — everything not ignored above is committed:
+#  *.py, *.png, *.pdf, *.md, *.m, *.R, *.sh, *.json, README, etc.)

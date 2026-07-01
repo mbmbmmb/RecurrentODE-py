@@ -1,0 +1,84 @@
+{
+  "defaults": {
+    "n_values": [1000],
+    "knots": "",
+    "ci": 1,
+    "seeds_per_task": 50,
+    "seed_offset": 0
+  },
+  "configs": {
+    "cox": {
+      "module": "cox",
+      "data_setting": 1,
+      "n_values": [1000],
+      "seeds_per_task": 50
+    },
+    "aft": {
+      "module": "aft",
+      "data_setting": 2,
+      "knots": "equal",
+      "n_values": [1000],
+      "seeds_per_task": 50
+    },
+    "ltm": {
+      "module": "ltm",
+      "data_setting": 4,
+      "knots": "K4",
+      "n_values": [1000],
+      "seeds_per_task": 5
+    },
+    "npmle": {
+      "module": "npmle",
+      "data_setting": 3,
+      "knots": "equal",
+      "n_values": [2000, 4000]
+    },
+    "re_cox": {
+      "module": "random_effect.cox",
+      "data_setting": 1
+    },
+    "re_aft": {
+      "module": "random_effect.aft_rec",
+      "data_setting": 2,
+      "knots": "quantile"
+    },
+    "re_ltm": {
+      "module": "random_effect.ltm",
+      "data_setting": 1,
+      "knots": "K4"
+    },
+    "inform_cox": {
+      "module": "inform_censor.cox",
+      "data_setting": 1,
+      "n_values": [1000]
+    },
+    "inform_aft": {
+      "module": "inform_censor.aft",
+      "data_setting": 2,
+      "knots": "equal",
+      "n_values": [1000]
+    },
+    "inform_cox_aftc": {
+      "module": "inform_censor.cox_aftc",
+      "data_setting": 1,
+      "n_values": [1000]
+    },
+    "inform_aft_aftc": {
+      "module": "inform_censor.aft_aftc",
+      "data_setting": 2,
+      "knots": "equal",
+      "n_values": [1000]
+    },
+    "inform_cox_unif": {
+      "module": "inform_censor.cox_unif",
+      "data_setting": 1,
+      "n_values": [1000]
+    },
+    "inform_aft_unif": {
+      "module": "inform_censor.aft_unif",
+      "data_setting": 2,
+      "knots": "equal",
+      "n_values": [1000]
+    }
+  }
+}
